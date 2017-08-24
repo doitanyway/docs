@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@latest/lib/themes/dark.css" title="dark" disabled>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@latest/lib/themes/buble.css" title="buble" disabled>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@latest/lib/themes/pure.css" title="pure" disabled>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
   <style>
     nav.app-nav li ul {
       min-width: 100px;
@@ -22,6 +23,22 @@
 </body>
 <script>
   window.$docsify = {
+    markdown: {
+      renderer:{
+        code: function(code, lang) {
+          var html = '';
+          if(code.match(/^sequenceDiagram/) || code.match(/^classDiagram/)|| code.match(/^gitGraph/) || code.match(/^graph/) || code.match(/^gantt/)){
+            html = '<div class="mermaid">' + code + '</div>';
+          }
+          var hl = Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup)
+          //return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + hl + '</code></pre>'
+          if(code.match(/^sequenceDiagram/))
+            return html + '<pre v-pre data-lang="' + lang + '"><!--code class="lang-' + lang + '">' + '</code--></pre>'
+          else
+            return html + '<pre v-pre data-lang="' + lang + '"><!--code class="lang-' + lang + '">' + hl + '</code--></pre>'
+        }
+      }
+    },
     alias: {
       '/.*/_navbar.md': '/_navbar.md'
     },
@@ -59,7 +76,13 @@
             + '\n----\n'
             + 'Last modified {docsify-updated} '
             + editHtml
-        })
+        });
+        hook.ready(function () {
+          mermaid.initialize({ startOnLoad: false });
+        });
+        hook.doneEach(function () {
+          mermaid.init(undefined, '.mermaid');
+        });
       }
     ]
   }
@@ -69,4 +92,5 @@
 <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-bash.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-markdown.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-nginx.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </html>
