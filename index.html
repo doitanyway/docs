@@ -32,10 +32,18 @@
           }
           var hl = Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup)
           //return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + hl + '</code></pre>'
-          if(code.match(/^sequenceDiagram/))
-            return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + '</code--></pre>'
+          if(code.match(/^sequenceDiagram/) || code.match(/^classDiagram/)|| code.match(/^gitGraph/) || code.match(/^graph/) || code.match(/^gantt/))
+          {
+            return html + '<pre v-pre data-lang="' + lang + '"></pre>'
+          }
           else
+          {
             return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + hl + '</code></pre>'
+          }
+          // if(code.match(/^sequenceDiagram/))
+          //   return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + '</code--></pre>'
+          // else
+          //   return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + hl + '</code></pre>'
         }
       }
     },
